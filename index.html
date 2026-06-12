@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="013TRIBE — Proof of Growth: A Blockchain Consensus Mechanism for Verified Physical Cultivation. A new protocol where verified plant growth replaces computational work as the source of token value.">
+<meta property="og:title" content="Proof of Growth — A Blockchain Consensus Mechanism for Verified Physical Cultivation">
+<meta property="og:description" content="013TRIBE introduces Proof of Growth — a blockchain where growing real food mints real tokens.">
+<meta property="og:type" content="website">
+<title>Proof of Growth · 013TRIBE Whitepaper · 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:        #120d07;
+  --ink-mid:    #1e1510;
+  --parchment:  #f5ede0;
+  --magenta:    #c0185a;
+  --pink:       #e8357a;
+  --pink-pale:  #f5c0d0;
+  --brown:      #3d2214;
+  --brown-pale: rgba(61,34,20,0.35);
+  --warm-gray:  #8c7b6e;
+  --light:      #d9c9b8;
+  --glow:       rgba(232,53,122,0.12);
+}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; font-size: 18px; }
+body {
+  background-color: var(--ink);
+  color: var(--parchment);
+  font-family: 'EB Garamond', Georgia, serif;
+  line-height: 1.9;
+  overflow-x: hidden;
+}
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  opacity: 0.025;
+  pointer-events: none;
+  z-index: 9999;
+}
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 40px;
+  background: linear-gradient(to bottom, rgba(18,13,7,0.95), rgba(18,13,7,0));
+  transition: background 0.4s;
+}
+nav.scrolled {
+  background: rgba(18,13,7,0.97);
+  border-bottom: 1px solid var(--brown-pale);
+}
+.nav-brand {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: 5px;
+  color: var(--magenta);
+  text-transform: uppercase;
+  text-decoration: none;
+}
+.nav-links {
+  display: flex;
+  gap: 28px;
+  list-style: none;
+}
+.nav-links a {
+  font-family: 'Cinzel', serif;
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: var(--warm-gray);
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--pink); }
+@media (max-width: 600px) { .nav-links { display: none; } }
+
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 40px 80px;
+  text-align: center;
+  position: relative;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 600px; height: 600px;
+  transform: translate(-50%, -60%);
+  background: radial-gradient(circle, rgba(192,24,90,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+.sun-wrap {
+  margin-bottom: 48px;
+  opacity: 0;
+  animation: riseIn 2.4s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.2s;
+}
+#sunsvg {
+  width: 140px; height: 140px;
+  filter: drop-shadow(0 0 28px rgba(232,53,122,0.35));
+  animation: pulse 6s ease-in-out infinite 3s;
+}
+@keyframes pulse {
+  0%, 100% { filter: drop-shadow(0 0 28px rgba(232,53,122,0.35)); }
+  50%       { filter: drop-shadow(0 0 48px rgba(232,53,122,0.55)); }
+}
+.sun-rays { animation: spin 120s linear infinite; transform-origin: 100px 100px; }
+.eyebrow {
+  font-family: 'Cinzel', serif;
+  font-size: 9px;
+  letter-spacing: 7px;
+  color: var(--magenta);
+  text-transform: uppercase;
+  margin-bottom: 28px;
+  opacity: 0;
+  animation: riseIn 1.6s ease forwards 0.8s;
+}
+h1 {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(30px, 5.5vw, 58px);
+  font-weight: 600;
+  color: var(--parchment);
+  letter-spacing: 2px;
+  line-height: 1.25;
+  margin-bottom: 16px;
+  opacity: 0;
+  animation: riseIn 1.6s ease forwards 1.0s;
+}
+.protocol-line {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(13px, 1.6vw, 17px);
+  letter-spacing: 2px;
+  color: var(--warm-gray);
+  margin-bottom: 20px;
+  opacity: 0;
+  animation: riseIn 1.6s ease forwards 1.1s;
+  text-transform: uppercase;
+}
+.subtitle {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(16px, 2.2vw, 22px);
+  font-style: italic;
+  color: var(--pink);
+  margin-bottom: 52px;
+  opacity: 0;
+  animation: riseIn 1.6s ease forwards 1.2s;
+}
+.author-block {
+  display: inline-block;
+  border-top: 1px solid var(--brown);
+  border-bottom: 1px solid var(--brown);
+  padding: 16px 44px;
+  opacity: 0;
+  animation: riseIn 1.6s ease forwards 1.4s;
+}
+.author {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 15px;
+  letter-spacing: 3px;
+  color: var(--light);
+}
+.location {
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: var(--warm-gray);
+  margin-top: 5px;
+}
+.license-line {
+  margin-top: 18px;
+  font-family: 'Cinzel', serif;
+  font-size: 8px;
+  letter-spacing: 3px;
+  color: var(--brown);
+  text-transform: uppercase;
+  opacity: 0;
+  animation: riseIn 1.6s ease forwards 1.6s;
+}
+.scroll-hint {
+  position: absolute;
+  bottom: 36px; left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Cinzel', serif;
+  font-size: 8px;
+  letter-spacing: 4px;
+  color: var(--warm-gray);
+  text-transform: uppercase;
+  opacity: 0;
+  animation: riseIn 1.6s ease forwards 2.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.scroll-hint::after {
+  content: '';
+  width: 1px; height: 36px;
+  background: linear-gradient(to bottom, var(--warm-gray), transparent);
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.4; }
+  50%       { opacity: 1; }
+}
+main {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 40px 140px;
+}
+.divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 52px 0;
+  color: var(--brown);
+}
+.divider::before, .divider::after {
+  content: '';
+  flex: 1;
+  max-width: 220px;
+  height: 1px;
+  background: linear-gradient(to var(--dir, right), transparent, var(--brown));
+}
+.divider::after { --dir: left; }
+.divider-inner { display: flex; align-items: center; gap: 10px; }
+.divider-dot { width: 5px; height: 5px; background: var(--magenta); border-radius: 50%; }
+.section {
+  margin-bottom: 0;
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+}
+.section.visible { opacity: 1; transform: translateY(0); }
+.section-label {
+  font-family: 'Cinzel', serif;
+  font-size: 9px;
+  letter-spacing: 5px;
+  color: var(--magenta);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  display: block;
+}
+h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(24px, 3.8vw, 36px);
+  font-weight: 300;
+  color: var(--parchment);
+  margin-bottom: 30px;
+  line-height: 1.35;
+}
+h2 em { font-style: italic; color: var(--pink); font-weight: 300; }
+p {
+  color: var(--light);
+  margin-bottom: 22px;
+  font-size: clamp(16px, 1.8vw, 18.5px);
+}
+p:last-child { margin-bottom: 0; }
+p strong { color: var(--parchment); font-weight: 500; }
+.table-wrap { overflow-x: auto; margin: 44px 0; -webkit-overflow-scrolling: touch; }
+.comparison { border-collapse: collapse; width: 100%; min-width: 480px; }
+.comparison th {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: var(--magenta);
+  text-transform: uppercase;
+  padding: 14px 20px;
+  text-align: left;
+  border-bottom: 1px solid var(--brown);
+}
+.comparison td {
+  padding: 15px 20px;
+  font-size: 15px;
+  color: var(--light);
+  border-bottom: 1px solid var(--brown-pale);
+  vertical-align: top;
+  line-height: 1.6;
+}
+.comparison td:first-child {
+  color: var(--warm-gray);
+  font-size: 12px;
+  letter-spacing: 1px;
+  font-family: 'Cinzel', serif;
+  text-transform: uppercase;
+  width: 28%;
+}
+.comparison tr:hover td { background: rgba(61,34,20,0.12); }
+.callout {
+  border-left: 2px solid var(--magenta);
+  padding: 22px 30px;
+  margin: 40px 0;
+  background: linear-gradient(to right, rgba(192,24,90,0.06), transparent);
+}
+.callout p {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(18px, 2.5vw, 23px);
+  font-style: italic;
+  color: var(--parchment);
+  margin: 0;
+  line-height: 1.65;
+}
+.tech-list { margin-top: 40px; }
+.tech-item {
+  margin-bottom: 32px;
+  padding: 20px 24px;
+  border: 1px solid var(--brown-pale);
+  background: rgba(61,34,20,0.1);
+  transition: border-color 0.3s, background 0.3s;
+}
+.tech-item:hover {
+  border-color: rgba(192,24,90,0.3);
+  background: rgba(192,24,90,0.05);
+}
+.tech-item strong {
+  display: block;
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: var(--pink);
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+.tech-item p { margin: 0; font-size: 15px; line-height: 1.7; }
+
+/* tokenomics principle rows */
+.principle-row {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--brown-pale);
+  margin-bottom: 16px;
+}
+.principle-label {
+  flex: 0 0 30%;
+  padding: 16px 20px;
+  background: rgba(61,34,20,0.2);
+  border-right: 1px solid var(--brown-pale);
+  font-family: 'Cinzel', serif;
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--pink);
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+}
+.principle-body {
+  flex: 1;
+  padding: 16px 20px;
+  font-size: 15px;
+  color: var(--light);
+  line-height: 1.7;
+}
+
+.declaration {
+  text-align: center;
+  padding: 64px 48px;
+  background: radial-gradient(ellipse at center, rgba(192,24,90,0.07) 0%, transparent 70%);
+  border: 1px solid rgba(192,24,90,0.18);
+  margin: 64px 0;
+  position: relative;
+}
+.declaration::before, .declaration::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1px; height: 24px;
+  background: rgba(192,24,90,0.4);
+}
+.declaration::before { top: 0; }
+.declaration::after  { bottom: 0; }
+.declaration p {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(20px, 2.8vw, 28px);
+  font-style: italic;
+  color: var(--parchment);
+  line-height: 2;
+  margin: 0;
+}
+.dedication { text-align: center; padding: 52px 0 0; }
+.dedication p {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 17px;
+  font-style: italic;
+  color: var(--warm-gray);
+  line-height: 2.2;
+  margin: 0;
+}
+footer {
+  text-align: center;
+  padding: 64px 40px 48px;
+  border-top: 1px solid var(--brown-pale);
+  margin-top: 60px;
+}
+.tagline {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: 6px;
+  color: var(--parchment);
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+.contact {
+  font-size: 14px;
+  color: var(--magenta);
+  text-decoration: none;
+  letter-spacing: 1px;
+  transition: color 0.2s;
+}
+.contact:hover { color: var(--pink); }
+.footer-meta {
+  margin-top: 20px;
+  font-family: 'Cinzel', serif;
+  font-size: 8px;
+  letter-spacing: 3px;
+  color: var(--brown);
+  text-transform: uppercase;
+  line-height: 2;
+}
+@keyframes riseIn {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@media (max-width: 600px) {
+  nav { padding: 16px 24px; }
+  .hero { padding: 100px 24px 80px; }
+  main { padding: 0 24px 100px; }
+  footer { padding: 48px 24px 40px; }
+  .declaration { padding: 44px 28px; }
+  .callout { padding: 18px 22px; }
+  .principle-row { flex-direction: column; }
+  .principle-label { flex: none; border-right: none; border-bottom: 1px solid var(--brown-pale); }
+}
+::selection { background: var(--magenta); color: var(--parchment); }
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <a href="#" class="nav-brand">013TRIBE</a>
+  <ul class="nav-links">
+    <li><a href="#origin">Origin</a></li>
+    <li><a href="#model">Model</a></li>
+    <li><a href="#protocol">Protocol</a></li>
+    <li><a href="#token">Token</a></li>
+    <li><a href="#tokenomics">Tokenomics</a></li>
+    <li><a href="#declaration">Declaration</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="sun-wrap">
+    <svg id="sunsvg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="coreGrad" cx="50%" cy="50%" r="50%">
+          <stop offset="0%"   stop-color="#f5c0d0"/>
+          <stop offset="35%"  stop-color="#e8357a"/>
+          <stop offset="100%" stop-color="#c0185a"/>
+        </radialGradient>
+        <radialGradient id="glowGrad" cx="50%" cy="50%" r="50%">
+          <stop offset="0%"   stop-color="#e8357a" stop-opacity="0.15"/>
+          <stop offset="100%" stop-color="#e8357a" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <circle cx="100" cy="100" r="96" fill="url(#glowGrad)"/>
+      <g class="sun-rays" id="rays"></g>
+      <circle cx="100" cy="100" r="40" fill="url(#coreGrad)" opacity="0.95"/>
+      <circle cx="100" cy="100" r="28" fill="#e8357a" opacity="0.65"/>
+      <circle cx="100" cy="100" r="16" fill="#f5c0d0" opacity="0.5"/>
+      <circle cx="100" cy="100" r="7"  fill="#fff5f8" opacity="0.85"/>
+    </svg>
+  </div>
+  <div class="eyebrow">013TRIBE · Whitepaper · 2026</div>
+  <h1>Proof of Growth</h1>
+  <div class="protocol-line">A Blockchain Consensus Mechanism for Verified Physical Cultivation</div>
+  <div class="subtitle">The Female Model of Bitcoin</div>
+  <div class="author-block">
+    <div class="author">Sophia Abramiשvili</div>
+    <div class="location">Tbilisi, Georgia · 2026</div>
+  </div>
+  <div class="license-line">Released under CC BY-SA 4.0 · Timestamped on Archive.org · 013tribe.dao</div>
+  <span class="scroll-hint">Scroll</span>
+</section>
+
+<main>
+
+  <!-- ABSTRACT -->
+  <div class="section">
+    <span class="section-label">Abstract</span>
+    <div class="callout">
+      <p>This paper introduces Proof of Growth — a blockchain consensus mechanism in which verified physical plant cultivation replaces computational work as the source of token value. Where Bitcoin's Proof of Work asks machines to prove they expended energy through mathematical computation, Proof of Growth asks humans to prove they grew life from the earth. The token produced is called GMF — Grow My Food. The protocol is open, decentralized from inception, and belongs to humanity.</p>
+    </div>
+  </div>
+
+  <div class="divider"><div class="divider-inner"><div class="divider-dot"></div></div></div>
+
+  <!-- I -->
+  <div class="section" id="origin">
+    <span class="section-label">I</span>
+    <h2>The Origin of This Idea</h2>
+    <p>Bitcoin was born from a question about trust — how do you prove that something real happened in a world of copies and deception? Satoshi Nakamoto's answer was elegant: make machines do real work, work that costs real energy, and record that work permanently on a shared ledger. The work cannot be faked because the energy expenditure is real. The token is the proof.</p>
+    <p>I arrived at this idea from a different direction. Not from cryptography but from soil. Not from computation but from nature. Not from the question of how machines prove work — but from the question of how humans prove life.</p>
+    <p>I am a Georgian woman, a mother, an artist and a researcher of human nature. I watched a generation of young people — many of them living near land, near fields, near the earth their grandparents cultivated — choosing instead to sit inside and earn digital points in virtual worlds. I asked myself: what if the blockchain could see what they grow? What if real food, verified by AI and recorded on chain, could be worth something? What if growing were mining?</p>
+    <p>This question became 013TRIBE. And 013TRIBE became this paper.</p>
+  </div>
+
+  <div class="divider"><div class="divider-inner"><div class="divider-dot"></div></div></div>
+
+  <!-- II -->
+  <div class="section" id="model">
+    <span class="section-label">II</span>
+    <h2>The Male and Female <em>Models of Value</em></h2>
+    <p>Every system of value creation has an energy direction. Understanding that direction is how you understand the system.</p>
+    <p>Bitcoin is outward energy. A machine takes fuel — electricity — and expends it explosively outward into the digital void, performing billions of calculations per second, radiating computational force until it finds the solution. The energy moves from inside to outside. It burns to emit. <strong>Like the sun.</strong></p>
+    <p>Proof of Growth is inward energy. A human tends the soil. The earth receives sunlight, water and care — drawing energy downward and inward — and from that depth produces life that emerges upward. The energy moves from outside to inside, transforms within, and creates from within. <strong>Like the earth.</strong></p>
+    <p>These are the male and female models of value — not moral categories, not hierarchies, but descriptions of energy direction. The sun radiates. The earth receives, transforms, and generates. Both are necessary. One without the other produces nothing.</p>
+    <div class="table-wrap">
+      <table class="comparison">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Bitcoin — Proof of Work</th>
+            <th>GMF — Proof of Growth</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>The Work</td><td>Mathematical computation</td><td>Real plant cultivation</td></tr>
+          <tr><td>The Machine</td><td>High-performance computer</td><td>Grownode device</td></tr>
+          <tr><td>The Proof</td><td>Mathematical solution on chain</td><td>Verified crop growth on chain</td></tr>
+          <tr><td>The Reward</td><td>Bitcoin minted to miner</td><td>GMF minted to grower</td></tr>
+          <tr><td>The Energy</td><td>Electricity</td><td>Human labor, water, soil, sunlight</td></tr>
+          <tr><td>The Output</td><td>Data</td><td>Food</td></tr>
+          <tr><td>The Direction</td><td>Outward — expansive, radiating</td><td>Inward — receptive, generative</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Neither is superior. The sun and the earth need each other. But until now, only the sun had a blockchain.</p>
+  </div>
+
+  <div class="divider"><div class="divider-inner"><div class="divider-dot"></div></div></div>
+
+  <!-- III -->
+  <div class="section" id="protocol">
+    <span class="section-label">III</span>
+    <h2>What Proof of Growth Is</h2>
+    <p>Proof of Growth is a blockchain consensus mechanism in which new tokens are created only when verified physical plant growth is recorded on chain.</p>
+    <p>A player grows real food on real land. A device called <strong>Grownode</strong> — integrating a camera, environmental sensors, GPS mapping and computer vision AI — observes and analyzes the plant over time. It measures green mass, crop development, soil conditions and growth rate simultaneously. When real growth is confirmed across all data streams, Grownode records a Proof of Growth event on the blockchain.</p>
+    <p>Multiple data streams are required by design. Visual analysis alone, or a single sensor reading alone, is not sufficient. Only the convergence of all inputs constitutes valid proof. This architecture makes falsification practically impossible without actually growing the plant — because no device, no matter how sophisticated, can fake the biological process that all streams are independently measuring.</p>
+    <div class="callout">
+      <p>No growth — no token. The supply of GMF is directly and permanently tied to the amount of real food grown in the physical world by real human hands.</p>
+    </div>
+  </div>
+
+  <div class="divider"><div class="divider-inner"><div class="divider-dot"></div></div></div>
+
+  <!-- IV -->
+  <div class="section">
+    <span class="section-label">IV</span>
+    <h2>The Human Miner — <em>Who Grows and Why</em></h2>
+    <p>In Bitcoin, the miner is a machine. In 013TRIBE, the miner is a human being.</p>
+    <p>The 013TRIBE player is someone who has access to land — or is willing to gain access to it. They may have no experience of growing food, some experience, or considerable experience. What they share is a readiness to grow their own food according to the 013TRIBE game scenario — a structured growing guide built on current agroecological research.</p>
+    <p>That research matters. A peer-reviewed study published in 2024 demonstrated that on approximately <strong>750 square meters of land</strong> — less than a tenth of a hectare — a single person can grow enough food to meet their complete nutritional needs year-round. The study showed that this small agroecological farm produced food with on average <strong>63% lower environmental burdens</strong> than conventional farming, while delivering higher nutritional quality per kilogram of produce. The farm required no synthetic fertilizers or herbicides, produced zero waste, and closed a full farm-to-table-to-farm cycle. The key practices were intercropping, crop rotation, and good soil building — all achievable with minimal labor by a person with basic guidance.</p>
+    <p>This is the land area of one 013TRIBE player. This is the science behind the game scenario.</p>
+    <p>The player does not need to be an expert. They need soil, seeds, and a Grownode device. The device provides the growing guidance. The science provides the proof that what they are doing is real, nutritionally meaningful, and environmentally superior to the food system it replaces. The blockchain records it. The token rewards it.</p>
+    <div class="callout">
+      <p>The human miner does not burn electricity to produce nothing physical. The human miner builds soil, plants seeds, tends life — and produces food.</p>
+    </div>
+  </div>
+
+  <div class="divider"><div class="divider-inner"><div class="divider-dot"></div></div></div>
+
+  <!-- V -->
+  <div class="section">
+    <span class="section-label">V</span>
+    <h2>Why 013TRIBE Needs <em>Its Own Blockchain</em></h2>
+    <p>Proof of Growth is not a smart contract that can be deployed on an existing chain. It is a consensus mechanism — the fundamental rule by which the network agrees on what is true and what earns a reward. This requires a purpose-built blockchain.</p>
+    <p>013TRIBE requires a fresh chain where Proof of Growth is the consensus layer itself — the bedrock rule that every node in the network agrees upon. On this chain, the only valid source of new token creation is a verified growth event submitted by a Grownode device and confirmed by the network. No growth event — no new tokens. This is not a policy. It is the law of the chain.</p>
+    <p><strong>The 013TRIBE chain is fully decentralized from inception.</strong> There is no trusted set of early validators, no permissioned phase, no central authority with special access. Every node participates equally. This is a philosophical commitment as much as a technical one — a chain that embodies the generative, open model of value must itself be open and trustless from the first block.</p>
+    <div class="tech-list">
+      <div class="tech-item">
+        <strong>Growth Validation Protocol</strong>
+        <p>The rules by which the network evaluates Proof of Growth submissions. Includes cryptographic device identity verification, multi-stream data integrity checks, and AI-based growth analysis. Consensus is reached when a sufficient quorum of independent nodes confirm the validity of a growth event.</p>
+      </div>
+      <div class="tech-item">
+        <strong>Fully Decentralized Node Network</strong>
+        <p>Any participant can run a validation node. Nodes evaluate growth submissions and reach consensus on new blocks. Validator incentives are built into the protocol — nodes earn a portion of each minting event they help confirm, creating a self-sustaining network of independent validators.</p>
+      </div>
+      <div class="tech-item">
+        <strong>Token Minting Contract</strong>
+        <p>On-chain logic that creates new GMF tokens only upon confirmed Proof of Growth events. Emission rates, maximum supply, and treasury allocations are baked into the protocol at genesis and cannot be altered by any single party.</p>
+      </div>
+      <div class="tech-item">
+        <strong>Device Identity Layer</strong>
+        <p>Each Grownode device is registered on chain with a unique cryptographic identity at manufacture. A device without a valid on-chain identity cannot submit growth proofs. Device registration is open and permissionless — any manufacturer can produce a compatible Grownode.</p>
+      </div>
+      <div class="tech-item">
+        <strong>Cross-Chain Bridge</strong>
+        <p>A bridge connecting the 013TRIBE chain to existing decentralized exchanges allows GMF to be traded openly without compromising the integrity of the native chain or the Proof of Growth consensus mechanism.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"><div class="divider-inner"><div class="divider-dot"></div></div></div>
+
+  <!-- VI -->
+  <div class="section">
+    <span class="section-label">VI</span>
+    <h2>013TRIBE — <em>The First Implementation</em></h2>
+    <p>Proof of Growth is a protocol. 013TRIBE is the first application built on it.</p>
+    <p>The protocol — the rules of how verified plant growth creates tokens — is open and belongs to humanity. Anyone could build a different application on Proof of Growth: a marketplace, a land registry, a regenerative farming cooperative, a community food system, a carbon credit mechanism. 013TRIBE is the first to do so, in the form of a physical gardening game where growing food is the act of play.</p>
+    <p>The underlying protocol is not owned. It is given.</p>
+  </div>
+
+  <div class="divider"><div class="divider-inner"><div class="divider-dot"></div></div></div>
+
+  <!-- VII -->
+  <div class="section" id="token">
+    <span class="section-label">VII</span>
+    <h2>The Economic Model — <em>GMF</em></h2>
+    <p><strong>GMF — Grow My Food</strong> — is the utility token of the Proof of Growth ecosystem. It is not a speculative asset. It is the recorded proof that a human grew food, expressed as transferable value.</p>
+    <div class="tech-list">
+      <div class="tech-item">
+        <strong>Supply</strong>
+        <p>GMF is minted only through verified growth events. No other mechanism creates new tokens. Emission rates are determined by crop type, verified green mass, growth duration, and seasonal variables. A larger, more productive growing operation earns more tokens than a smaller one — the token mirrors the real-world output it represents.</p>
+      </div>
+      <div class="tech-item">
+        <strong>Utility</strong>
+        <p>GMF circulates within the 013TRIBE game ecosystem. Players earn GMF by growing and spend it in the marketplace on seeds, tools, soil amendments, growing guides, and in-game items. The token is the medium of exchange for the entire player economy.</p>
+      </div>
+      <div class="tech-item">
+        <strong>Exchange</strong>
+        <p>GMF is listed on decentralized exchanges via a bridge from the 013TRIBE chain. A liquidity fund established at genesis gives GMF a functional floor and ensures exchangeability from the first minting event.</p>
+      </div>
+      <div class="tech-item">
+        <strong>Treasury</strong>
+        <p>A portion of all marketplace transactions flows into a community-governed treasury. The treasury maintains the liquidity pool, funds protocol development, and allocates resources to ecosystem growth. Governance of the treasury is distributed to token holders over time.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"><div class="divider-inner"><div class="divider-dot"></div></div></div>
+
+  <!-- VIII -->
+  <div class="section">
+    <span class="section-label">VIII</span>
+    <h2>The Garden Plot as <em>a Living NFT</em></h2>
+    <p>Each player's land is represented on chain as an <strong>iNFT</strong> — an intelligent, dynamic non-fungible token built on the ERC-7857 standard. Unlike static NFTs, the iNFT evolves in real time as the player grows. It is a living digital twin of real physical land — its metadata, appearance, and accumulated history changing as crops grow, seasons pass, and the grower develops skill and recorded presence on the land.</p>
+    <p>The iNFT is not a representation of ownership of the land. It is a record of the relationship between a human and a piece of earth over time. That relationship — the hours, the harvests, the seasons — recorded permanently on chain, is itself a new kind of value. A plot tended for three years carries more on-chain history than one touched for three days. The iNFT makes that history legible and transferable.</p>
+  </div>
+
+  <div class="divider"><div class="divider-inner"><div class="divider-dot"></div></div></div>
+
+  <!-- IX — NEW TOKENOMICS SECTION -->
+  <div class="section" id="tokenomics">
+    <span class="section-label">IX</span>
+    <h2>Tokenomics — <em>Principles of Supply and Distribution</em></h2>
+    <p>The GMF token economy is governed by a set of founding principles established at genesis. Exact numerical parameters — maximum supply, per-event emission rates, distribution percentages — will be finalized by the technical team in the protocol specification prior to chain launch. The principles below are fixed. The numbers are their precise expression.</p>
+
+    <div style="margin-top: 36px;">
+      <div class="principle-row">
+        <div class="principle-label">Supply Cap</div>
+        <div class="principle-body">GMF has a fixed maximum supply, established at genesis and encoded in the minting contract. No mechanism exists to increase this cap after launch. The total supply is finite, as Bitcoin's is finite — scarcity is structural, not managed.</div>
+      </div>
+      <div class="principle-row">
+        <div class="principle-label">Emission Logic</div>
+        <div class="principle-body">New tokens are minted only upon confirmed Proof of Growth events. The emission rate per event is a function of verified green mass, crop type, and growth duration. A baseline emission floor ensures that even small grows produce a minimum reward. A ceiling prevents any single event from minting a disproportionate share of remaining supply.</div>
+      </div>
+      <div class="principle-row">
+        <div class="principle-label">Genesis Distribution</div>
+        <div class="principle-body">A defined percentage of total supply is allocated at genesis across four pools: community growing rewards (the largest allocation, distributed through the minting mechanism over time), liquidity fund (ensures exchangeability from launch), development treasury (community-governed, funds ongoing protocol work), and founding team (subject to a vesting schedule aligned with long-term protocol health).</div>
+      </div>
+      <div class="principle-row">
+        <div class="principle-label">Vesting</div>
+        <div class="principle-body">Founding team allocations are subject to a time-locked vesting schedule. No founding tokens are liquid at launch. This aligns the incentives of the founding team with the long-term health of the ecosystem, not with short-term token price.</div>
+      </div>
+      <div class="principle-row">
+        <div class="principle-label">Anti-Inflation</div>
+        <div class="principle-body">Because token supply is tied to physical food grown — a process constrained by real-world limits of land, labor, and season — GMF cannot be inflated through code alone. The protocol has no administrator key, no mint function outside the Proof of Growth pathway, and no mechanism for any party to create tokens outside of verified cultivation.</div>
+      </div>
+      <div class="principle-row">
+        <div class="principle-label">Burn Mechanism</div>
+        <div class="principle-body">A portion of marketplace transaction fees are burned — permanently removed from circulation. This creates a mild deflationary pressure that increases as marketplace activity grows, balancing the ongoing emission from new growth events.</div>
+      </div>
+      <div class="principle-row">
+        <div class="principle-label">Validator Rewards</div>
+        <div class="principle-body">Nodes that participate in validating Proof of Growth events earn a small percentage of each minting event they confirm. This reward is drawn from the emission itself — validators and growers share the value created by each confirmed growth event. No separate validator token exists.</div>
+      </div>
+    </div>
+
+    <div class="callout" style="margin-top: 40px;">
+      <p>The token is not the product. The food is the product. The token is the proof that the food was grown — and the instrument that makes that proof economically meaningful.</p>
+    </div>
+  </div>
+
+  <div class="divider"><div class="divider-inner"><div class="divider-dot"></div></div></div>
+
+  <!-- X -->
+  <div class="section" id="declaration">
+    <span class="section-label">X</span>
+    <h2>The Open Declaration</h2>
+    <p>Bitcoin was released to humanity without patent, without ownership, without restriction. Satoshi Nakamoto understood that an idea powerful enough to change the world should belong to the world.</p>
+    <p>I make the same declaration for Proof of Growth.</p>
+    <p>This protocol belongs to humanity. To every farmer who never had a blockchain. To every young person with land and no reason to use it. To every woman whose generative, inward, earth-rooted way of creating value was never reflected in the systems of the digital economy. To every community whose relationship with the soil is older than any technology we have built on top of it.</p>
+    <p>The Female Model of Bitcoin is not a product. It is a recognition — that the earth has always been doing proof of work, and the work was always real, and it was always worth something. We are only now building the ledger that can see it.</p>
+    <div class="declaration">
+      <p>I planted this seed.<br>I release it openly.<br>Let it grow.</p>
+    </div>
+    <div class="dedication">
+      <p>This work is dedicated to our ancestors,<br>to our children,<br>and to the Caucasus Mountains.</p>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <div class="tagline">013TRIBE · Grow Food · Earn Tokens · Create Reality</div>
+  <a href="mailto:sophiaabramishvili@gmail.com" class="contact">sophiaabramishvili@gmail.com</a>
+  <div class="footer-meta">
+    013tribe.dao · 2026<br>
+    © Sophia Abramiשvili · Released under CC BY-SA 4.0<br>
+    Timestamped on Archive.org · OpenTimestamps
+  </div>
+</footer>
+
+<script>
+(function() {
+  const g = document.getElementById('rays');
+  const ns = 'http://www.w3.org/2000/svg';
+  const N = 80;
+  for (let i = 0; i < N; i++) {
+    const angle = (i / N) * Math.PI * 2;
+    const r2 = 86 + Math.random() * 14;
+    const line = document.createElementNS(ns, 'line');
+    line.setAttribute('x1', 100 + Math.cos(angle) * 44);
+    line.setAttribute('y1', 100 + Math.sin(angle) * 44);
+    line.setAttribute('x2', 100 + Math.cos(angle) * r2);
+    line.setAttribute('y2', 100 + Math.sin(angle) * r2);
+    line.setAttribute('stroke', '#c0185a');
+    line.setAttribute('stroke-width', 0.6 + Math.random() * 0.6);
+    line.setAttribute('opacity', 0.3 + Math.random() * 0.45);
+    g.appendChild(line);
+  }
+})();
+
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 60);
+}, { passive: true });
+
+const sections = document.querySelectorAll('.section');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.08 });
+sections.forEach(s => obs.observe(s));
+</script>
+</body>
+</html>
